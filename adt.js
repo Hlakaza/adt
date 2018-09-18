@@ -1,9 +1,11 @@
 (function (window, document) {
-	// Check for addEventListener browser support (prevent errors in IE<9)
-	var _eventListener = 'addEventListener' in window;
-	// the element the message will be appended to
-//  console.log(container)
-// Check if document is loaded, needed by autostart
+/**
+ *Check for addEventListener browser support (prevent errors in IE<9)
+ */ 
+var _eventListener = 'addEventListener' in window;
+/**
+ * Check if document is loaded, needed by autostart
+ */ 
 var _DOMReady = false;
 if ( document.readyState === 'complete' ) {
 	_DOMReady = true;
@@ -16,7 +18,9 @@ function loaded () {
 	_DOMReady = true;
 }
 
-// regex used to detect if app has been added to the homescreen
+/**
+ *  Regex used to detect if app has been added to the homescreen
+ */ 
 var _reSmartURL = /\/ath(\/)?$/;
 var _reQueryString = /([\?&]ath=[^&]*$|&ath=[^&]*(&))/;
 
@@ -432,7 +436,9 @@ ath.Class.prototype = {
 	},
 
 	show: function (force) {
-		// in autostart mode wait for the document to be ready
+		/**
+		 *  in autostart mode wait for the document to be ready
+		 */
 		if ( this.options.autostart && !_DOMReady ) {
 			setTimeout(this.show.bind(this), 50);
 			// we are not displaying callout because DOM not ready, but don't log that because
@@ -450,19 +456,25 @@ ath.Class.prototype = {
 		var lastDisplayTime = this.session.lastDisplayTime;
 
 		if ( force !== true ) {
-			// this is needed if autostart is disabled and you programmatically call the show() method
+			/**
+			 *  This is needed if autostart is disabled and you programmatically call the show() method
+			 */
 			if ( !this.ready ) {
 				this.doLog("Add to homescreen: not displaying callout because not ready");
 				return;
 			}
 
-			// we obey the display pace (prevent the message to popup too often)
+			/**
+			 *  Display pace 1hr from current show (prevent the message to popup too often)
+			 */
 			if ( now - lastDisplayTime < this.options.displayPace * 60000 ) {
 				this.doLog("Add to homescreen: not displaying callout because displayed recently");
 				return;
 			}
 
-			// obey the maximum number of display count
+			/**
+			 *  Log the message if maximum number of display count has reached
+			 */ 
 			if ( this.options.maxDisplayCount && this.session.displayCount >= this.options.maxDisplayCount ) {
 				this.doLog("Add to homescreen: not displaying callout because displayed too many times already");
 				return;
@@ -471,12 +483,16 @@ ath.Class.prototype = {
 
 		this.shown = true;
 
-		// increment the display count
+		/**
+		 *  Increment the display count
+		 */
 		this.session.lastDisplayTime = now;
 		this.session.displayCount++;
 		this.updateSession();
 
-		// try to get the highest resolution application icon
+		/**
+		 * Getting the highest resolution application icon from the head
+		 */
 		if ( !this.applicationIcon ) {
 			if ( ath.OS == 'ios' ) {
 				this.applicationIcon = document.querySelector('head link[rel^=apple-touch-icon][sizes="152x152"],head link[rel^=apple-touch-icon][sizes="144x144"],head link[rel^=apple-touch-icon][sizes="120x120"],head link[rel^=apple-touch-icon][sizes="114x114"],head link[rel^=apple-touch-icon]');
@@ -499,7 +515,9 @@ ath.Class.prototype = {
 			message = ath.intl[ath.language][ath.OS];
 		}
 
-		// add the action icon
+		/**
+		 *  Add the action icon
+		 */ 
 		message = '<p>' + message.replace(/%icon(?:\[([^\]]+)\])?/gi, function(matches, group1) {
 			return '<span class="ath-action-icon">' + (!!group1 ? group1 : 'icon') + '</span>';
 		}) + '</p>';
@@ -522,28 +540,38 @@ ath.Class.prototype = {
 		this.element.style.webkitTransform = 'translate3d(0,-' + window.innerHeight + 'px,0)';
 		this.element.style.transform = 'translate3d(0,-' + window.innerHeight + 'px,0)';
 
-		// add the application icon
+		/**
+		 *  Get the application icon and add to the message dialogue
+		 */
 		if ( this.options.icon && this.applicationIcon ) {
 			this.element.className += ' ath-icon';
 			this.img = document.createElement('img');
 			this.img.className = 'ath-application-icon';
 			this.img.addEventListener('load', this, false);
 			this.img.addEventListener('error', this, false);
-
 			this.img.src = this.applicationIcon.href;
 			this.element.appendChild(this.img);
 		}
 
-		this.element.innerHTML += message;
+		/**
+		 * Set the message to show 
+		 */
+		  this.element.innerHTML += message;
 
-		// we are not ready to show, place the message out of sight
+		/** 
+		 * Message not ready to show, place out of sight
+		 */
 		this.viewport.style.left = '-99999em';
 
-		// attach all elements to the DOM
+		/**
+		 * Attaching the message to the dom
+		 */
 		this.viewport.appendChild(this.element);
 		document.body.appendChild(this.viewport);
 
-		// if we don't have to wait for an image to load, show the message right away
+		/**
+		 * Wait for the app icom image to load before showing the dialogue
+		 */
 		if ( this.img ) {
 			this.doLog("Add to homescreen: not displaying callout because waiting for img to load");
 		} else {
@@ -588,7 +616,7 @@ ath.Class.prototype = {
 
 		// set the destroy timer
 		if ( this.options.lifespan ) {
-			this.removeTimer = setTimeout(this.remove.bind(this), this.options.lifespan * 1000);
+			this.removeTimer = setTimeout(this.remove.bind(this), this.options.lifespan * 1500);
 		}
 
 		// fire the custom onShow event
