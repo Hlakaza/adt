@@ -1,7 +1,8 @@
 (function (window, document) {
-// Check for addEventListener browser support (prevent errors in IE<9)
-var _eventListener = 'addEventListener' in window;
-
+	// Check for addEventListener browser support (prevent errors in IE<9)
+	var _eventListener = 'addEventListener' in window;
+	// the element the message will be appended to
+//  console.log(container)
 // Check if document is loaded, needed by autostart
 var _DOMReady = false;
 if ( document.readyState === 'complete' ) {
@@ -170,7 +171,7 @@ ath.defaults = {
 	displayPace: 1440,			// minutes before the message is shown again (0: display every time, default 24 hours)
 	maxDisplayCount: 0,			// absolute maximum number of times the message will be shown to the user (0: no limit)
 	icon: true,					// add touch icon to the message
-	message: '',				// the message can be customized
+	message: ath.intl.en_us,				// the message can be customized
 	validLocation: [],			// list of pages where the message will be shown (array of regexes)
 	onInit: null,				// executed on instance creation
 	onShow: null,				// executed when the message is shown
@@ -266,8 +267,7 @@ ath.Class = function (options) {
 		ath.OSVersion = ath.OS == 'ios' ? '8' : '4';
 	}
 
-	// the element the message will be appended to
-	this.container = document.body;
+
 
 	// load session
 	this.session = this.getItem(this.options.appID);
@@ -541,7 +541,7 @@ ath.Class.prototype = {
 
 		// attach all elements to the DOM
 		this.viewport.appendChild(this.element);
-		this.container.appendChild(this.viewport);
+		document.body.appendChild(this.viewport);
 
 		// if we don't have to wait for an image to load, show the message right away
 		if ( this.img ) {
@@ -628,7 +628,7 @@ ath.Class.prototype = {
 		this.element.removeEventListener('MSTransitionEnd', this, false);
 
 		// remove the message from the DOM
-		this.container.removeChild(this.viewport);
+		document.body.removeChild(this.viewport);
 
 		this.shown = false;
 
