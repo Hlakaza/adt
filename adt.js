@@ -26,9 +26,9 @@ var _reQueryString = /([\?&]ath=[^&]*$|&ath=[^&]*(&))/;
 
 // singleton
 var _instance;
+
 function ath (options) {
 	_instance = _instance || new ath.Class(options);
-
 	return _instance;
 }
 
@@ -162,7 +162,7 @@ for ( var lang in ath.intl ) {
 
 // default options
 ath.defaults = {
-	appID: 'addtohome',		// local storage name (no need to change)
+	appID: 'addtohome',		    // local storage name
 	fontSize: 15,				// base font size, used to properly resize the popup based on viewport scale factor
 	debug: false,				// override browser checks
 	logging: false,				// log reasons for showing or not showing to js console; defaults to true when debug is true
@@ -173,9 +173,9 @@ ath.defaults = {
 	startDelay: 1,				// display the message after that many seconds from page load
 	lifespan: 15,				// life of the message in seconds
 	displayPace: 1440,			// minutes before the message is shown again (0: display every time, default 24 hours)
-	maxDisplayCount: 0,			// absolute maximum number of times the message will be shown to the user (0: no limit)
+	maxDisplayCount: 10,		// absolute maximum number of times the message will be shown to the user (0: no limit)
 	icon: true,					// add touch icon to the message
-	message: ath.intl.en_us,				// the message can be customized
+	message: '',    			// the message can be customized
 	validLocation: [],			// list of pages where the message will be shown (array of regexes)
 	onInit: null,				// executed on instance creation
 	onShow: null,				// executed when the message is shown
@@ -203,7 +203,7 @@ _extend(ath, {
 ath.language = ath.language && ath.language in ath.intl ? ath.language : 'en_us';
 
 ath.isMobileSafari = ath.isIDevice && _ua.indexOf('Safari') > -1 && _ua.indexOf('CriOS') < 0;
-ath.OS = ath.isIDevice ? 'ios' : ath.isMobileChrome ? 'android' : ath.isMobileIE ? 'windows' : 'unsupported';
+ath.OS = ath.isIDevice ? 'ios' : ath.isMobileChrome ? 'unsupported' : ath.isMobileIE ? 'windows' : 'unsupported';
 
 ath.OSVersion = _ua.match(/(OS|Android) (\d+[_\.]\d+)/);
 ath.OSVersion = ath.OSVersion && ath.OSVersion[2] ? +ath.OSVersion[2].replace('_', '.') : 0;
@@ -354,6 +354,7 @@ ath.Class = function (options) {
 
 	// (try to) check if the page has been added to the homescreen
 	if ( this.options.detectHomescreen ) {
+		debugger
 		// the URL has the token, we are likely coming from the homescreen
 		if ( ath.hasToken ) {
 			_removeToken();		// we don't actually need the token anymore, we remove it to prevent redistribution
@@ -445,16 +446,13 @@ ath.Class.prototype = {
 			// it would log too frequently
 			return;
 		}
-
 		// message already on screen
 		if ( this.shown ) {
 			this.doLog("Add to homescreen: not displaying callout because already shown on screen");
 			return;
 		}
-
 		var now = Date.now();
 		var lastDisplayTime = this.session.lastDisplayTime;
-
 		if ( force !== true ) {
 			/**
 			 *  This is needed if autostart is disabled and you programmatically call the show() method
@@ -463,7 +461,6 @@ ath.Class.prototype = {
 				this.doLog("Add to homescreen: not displaying callout because not ready");
 				return;
 			}
-
 			/**
 			 *  Display pace 1hr from current show (prevent the message to popup too often)
 			 */
@@ -471,7 +468,6 @@ ath.Class.prototype = {
 				this.doLog("Add to homescreen: not displaying callout because displayed recently");
 				return;
 			}
-
 			/**
 			 *  Log the message if maximum number of display count has reached
 			 */ 

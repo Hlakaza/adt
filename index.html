@@ -36,8 +36,8 @@
 <link rel="stylesheet" type="text/css" href="adt.css">
 <script src="adt.js"></script>
 <script>
-  addToHomescreen({detectHomescreen: true});
   registerServiceWorker();
+  addToHomescreen();
     function registerServiceWorker() {
       // register sw script in supporting browsers
       if ('serviceWorker' in navigator) {
@@ -47,7 +47,8 @@
           console.log('Service Worker registration failed:', error);
         });
       }
-    }</script>
+    }
+    </script>
 </head>
 <body>
     <div class="container">
