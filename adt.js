@@ -1,3 +1,4 @@
+addToHomescreen();
 (function (window, document) {
 /**
  *Check for addEventListener browser support (prevent errors in IE<9)
