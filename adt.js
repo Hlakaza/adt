@@ -24,7 +24,6 @@
 	var _reSmartURL = /\/ath(\/)?$/;
 	var _reQueryString = /([\?&]ath=[^&]*$|&ath=[^&]*(&))/;
 	
-	// singleton
 	var _instance;
 	
 	function ath (options) {
@@ -188,22 +187,23 @@
 	
 	// browser info and capability
 	var _ua = window.navigator.userAgent;
-	
 	var _nav = window.navigator;
+	var culture = window.global.request.culture
+	console.log(culture);
 	_extend(ath, {
 		hasToken: document.location.hash == '#ath' || _reSmartURL.test(document.location.href) || _reQueryString.test(document.location.search),
 		isRetina: window.devicePixelRatio && window.devicePixelRatio > 1,
 		isIDevice: (/iphone|ipod|ipad/i).test(_ua),
 		isMobileChrome: _ua.indexOf('Android') > -1 && (/Chrome\/[.0-9]*/).test(_ua) && _ua.indexOf("Version") == -1,
 		isMobileIE: _ua.indexOf('Windows Phone') > -1,
-		language: _nav.language && _nav.language.toLowerCase().replace('-', '_') || ''
+		language: culture ? culture.toLowerCase().replace('-', '_') || '' : _nav.language.toLowerCase().replace('-', '_') || ''       
 	});
 	
 	// falls back to en_us if language is unsupported
 	ath.language = ath.language && ath.language in ath.intl ? ath.language : 'en_us';
 	
 	ath.isMobileSafari = ath.isIDevice && _ua.indexOf('Safari') > -1 && _ua.indexOf('CriOS') < 0;
-	ath.OS = ath.isIDevice ? 'ios' : ath.isMobileChrome ? 'unsupported' : ath.isMobileIE ? 'windows' : 'unsupported';
+	ath.OS = ath.isIDevice ? 'ios' : ath.isMobileChrome ? 'Android' : ath.isMobileIE ? 'windows' : 'unsupported';
 	
 	ath.OSVersion = _ua.match(/(OS|Android) (\d+[_\.]\d+)/);
 	ath.OSVersion = ath.OSVersion && ath.OSVersion[2] ? +ath.OSVersion[2].replace('_', '.') : 0;

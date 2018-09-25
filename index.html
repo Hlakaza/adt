@@ -34,21 +34,24 @@
 <meta name="theme-color" content="#3f51b5">
 
 <link rel="stylesheet" type="text/css" href="adt.css">
-<script src="adt.js"></script>
 <script>
-  registerServiceWorker();
-  addToHomescreen();
-    function registerServiceWorker() {
-      // register sw script in supporting browsers
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js', { scope: '/adt/' }).then(() => {
-          console.log('Service Worker registered successfully.');
-        }).catch(error => {
-          console.log('Service Worker registration failed:', error);
-        });
-      }
-    }
-    </script>
+  var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+  var iosAddToHome = document.createElement('script');
+   iosAddToHome.src('adt.js')
+   if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+    console.log('Service Worker registered successfully.')
+  } else {
+    console.log('Service Worker registration failed')
+  }
+ 
+  if (iOS) {
+      document.head.appendChild(iosAddToHome);
+      setTimeout(()=> {
+      addToHomescreen();
+      }, 500)
+  }
+</script>
 </head>
 <body>
     <div class="container">
