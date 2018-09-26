@@ -189,16 +189,16 @@
 	var _ua = window.navigator.userAgent;
 	var _nav = window.navigator;
 	var culture = window.global.request.culture
-	console.log(culture);
 	_extend(ath, {
 		hasToken: document.location.hash == '#ath' || _reSmartURL.test(document.location.href) || _reQueryString.test(document.location.search),
 		isRetina: window.devicePixelRatio && window.devicePixelRatio > 1,
 		isIDevice: (/iphone|ipod|ipad/i).test(_ua),
-		isMobileChrome: _ua.indexOf('Android') > -1 && (/Chrome\/[.0-9]*/).test(_ua) && _ua.indexOf("Version") == -1,
-		isMobileIE: _ua.indexOf('Windows Phone') > -1,
-		language: culture ? culture.toLowerCase().replace('-', '_') || '' : _nav.language.toLowerCase().replace('-', '_') || ''       
-	});
-	
+	isMobileChrome: _ua.indexOf('Android') > -1 && (/Chrome\/[.0-9]*/).test(_ua) && _ua.indexOf("Version") == -1,
+	isMobileIE: _ua.indexOf('Windows Phone') > -1,
+	language: culture ? culture.toLowerCase().replace('-', '_') || '' : _nav.language.toLowerCase().replace('-', '_') || ''       
+});
+
+   console.log(language);
 	// falls back to en_us if language is unsupported
 	ath.language = ath.language && ath.language in ath.intl ? ath.language : 'en_us';
 	
@@ -229,7 +229,6 @@
 	
 			localStorage.removeItem(appID || ath.defaults.appID);
 		} catch (e) {
-			// we are most likely in private mode
 		}
 	};
 	
@@ -251,12 +250,16 @@
 			this.options.logging = true;
 		}
 	
-		// IE<9 so exit (I hate you, really)
+		/**
+		 *  exit on iE
+		 */
 		if ( !_eventListener ) {
 			return;
 		}
 	
-		// normalize some options
+		/**
+		 *  normalize some options
+		 */
 		this.options.mandatory = this.options.mandatory && ( 'standalone' in window.navigator || this.options.debug );
 		this.options.modal = this.options.modal || this.options.mandatory;
 		if ( this.options.mandatory ) {
@@ -264,7 +267,9 @@
 		}
 		this.options.detectHomescreen = this.options.detectHomescreen === true ? 'hash' : this.options.detectHomescreen;
 	
-		// setup the debug environment
+		/**
+		 *  setup the debug environment
+		 */
 		if ( this.options.debug ) {
 			ath.isCompatible = true;
 			ath.OS = typeof this.options.debug == 'string' ? this.options.debug : ath.OS == 'unsupported' ? 'android' : ath.OS;
