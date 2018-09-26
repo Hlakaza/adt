@@ -188,17 +188,17 @@
 	// browser info and capability
 	var _ua = window.navigator.userAgent;
 	var _nav = window.navigator;
-	var culture = window.global.request.culture
+
 	_extend(ath, {
 		hasToken: document.location.hash == '#ath' || _reSmartURL.test(document.location.href) || _reQueryString.test(document.location.search),
 		isRetina: window.devicePixelRatio && window.devicePixelRatio > 1,
 		isIDevice: (/iphone|ipod|ipad/i).test(_ua),
-	isMobileChrome: _ua.indexOf('Android') > -1 && (/Chrome\/[.0-9]*/).test(_ua) && _ua.indexOf("Version") == -1,
-	isMobileIE: _ua.indexOf('Windows Phone') > -1,
-	language: culture ? culture.toLowerCase().replace('-', '_') || '' : _nav.language.toLowerCase().replace('-', '_') || ''       
+		isMobileChrome: _ua.indexOf('Android') > -1 && (/Chrome\/[.0-9]*/).test(_ua) && _ua.indexOf("Version") == -1,
+		isMobileIE: _ua.indexOf('Windows Phone') > -1,
+		language: window.global === undefined ? _nav.language.toLowerCase().replace('-', '_') || '' : window.global.request.culture.toLowerCase().replace('-', '_') || ''       
 });
 
-   console.log(language);
+   console.log(ath.language);
 	// falls back to en_us if language is unsupported
 	ath.language = ath.language && ath.language in ath.intl ? ath.language : 'en_us';
 	
