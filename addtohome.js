@@ -198,7 +198,6 @@
 		language: window.global === undefined ? _nav.language.toLowerCase().replace('-', '_') || '' : window.global.request.culture.toLowerCase().replace('-', '_') || ''
 	});
 
-	console.log(ath.language);
 	// falls back to en_us if language is unsupported
 	ath.language = ath.language && ath.language in ath.intl ? ath.language : 'en_us';
 
