@@ -50,7 +50,7 @@
 }
 </style>
 <script>
-  var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+  var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(window.navigator.platform);
   var iosAddToHome = document.createElement('script');
 
    if ('serviceWorker' in navigator) {
@@ -66,6 +66,8 @@
       setTimeout(()=> {
       addToHomescreen();
       }, 500)
+  }else {
+      console.log('Is ios device', iOS)
   }
 </script>
 </head>
