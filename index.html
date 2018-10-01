@@ -50,25 +50,22 @@
 }
 </style>
 <script>
-  var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+  var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(window.navigator.platform);
   var iosAddToHome = document.createElement('script');
-
    if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
     console.log('Service Worker registered successfully.')
   } else {
     console.log('Service Worker registration failed')
   }
- alert(iOS);
-  iosAddToHome.src = 'addtohome.js';
+if (iOS) {
+      iosAddToHome.src = 'addtohome.js';
       document.head.appendChild(iosAddToHome);
       setTimeout(function() {
         alert(iOS);
         addToHomescreen();
       }, 500)
-//   if (iOS) {
- 
-//   }
+}
 </script>
 </head>
 <body>
