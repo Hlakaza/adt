@@ -59,7 +59,7 @@
   } else {
     console.log('Service Worker registration failed')
   }
- 
+ console.log('Is ios device', iOS)
   if (iOS) {
       iosAddToHome.src = 'addtohome.js';
       document.head.appendChild(iosAddToHome);
