@@ -59,14 +59,15 @@
   } else {
     console.log('Service Worker registration failed')
   }
- 
-  if (iOS) {
-      iosAddToHome.src = 'addtohome.js';
+  console.log(iOS);
+  iosAddToHome.src = 'addtohome.js';
       document.head.appendChild(iosAddToHome);
       setTimeout(()=> {
       addToHomescreen();
       }, 500)
-  }
+//   if (iOS) {
+ 
+//   }
 </script>
 </head>
 <body>
