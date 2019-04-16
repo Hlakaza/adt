@@ -764,6 +764,6 @@
 	}
 
 	// expose to the world
-	window.addToHomescreen = ath;
+(window.addToHomescreen = ath);
 
 })(window, document);
